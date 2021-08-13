@@ -1,0 +1,179 @@
+Enum GENDER {
+  Male
+  Female
+  "Prefer Not To Say"
+}
+
+Enum THEME {
+  Dark
+  Light 
+  Auto
+}
+
+Enum CATEGORY{
+  Technology
+  Artist
+  Blogger
+  Education
+  Entrepreneur
+  Photographer
+}
+
+Enum LANGUAGE {
+  Tamil
+  English
+}
+
+table Users {
+  id int [pk]
+  firstName varchar [not null]
+  lastName varchar 
+  userName varchar [not null, unique]
+  bio varchar [not null]
+  avatar varchar
+  gender "GENDER"
+  dob timestamp
+  website varchar
+  location varchar
+  email varchar [unique]
+  phone varchar [unique]
+  category "CATEGORY" [not null]
+  followersCount int [not null, default: 0]
+  followingCount int [not null, default: 0]
+  postsCount int [not null, default: 0]
+  verifiedUser boolean [not null]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Friends {
+  id int 
+  follower int [not null]
+  followee int [not null]
+   createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Posts {
+  id int [pk]
+  userid int [not null] 
+  images int 
+  likesCount int [not null, default: 0]
+  commentsCount int [not null, default: 0]
+  description varchar
+  commentsAllowed boolean [default: `true`]
+  location varchar
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Comments {
+  id int [pk]
+  userId int [not null] 
+  postId int [not null]
+  likesCount int [not null]
+  text varchar
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Images {
+  id int [pk]
+  postId int [not null]
+  url varchar [not null, unique ]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table PostMentions {
+  id int [pk]
+  postId int [not null]
+  userId int [not null]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table CommentMentions {
+  id int [pk]
+  commentId int [not null]
+  postId int [not null]
+  userId int [not null]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Tags{
+  id int [pk]
+  tagName varchar [not null, unique]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table PostTags {
+  id int [pk]
+  tagId int 
+  postId int
+   createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table CommentTags {
+  id int [pk]
+  tagId int 
+  commentId int
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+
+table Notifications {
+  id int [pk]
+  fromUser int [not null]
+  toUser int [not null]
+  message varchar [not null]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Settings {
+  id int 
+  userId int [not null, unique]
+  language "LANGUAGE" [not null]
+  pushNorifications boolean
+  theme "THEME" [not null]
+  privateAccount boolean
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+table Messages {
+  id int [pk]
+  fromUser int [not null]
+  toUser int [not null]
+  text varchar 
+  isDelivered boolean [default: `false`]
+  isRead boolean [default: `false`]
+  createdAt timestamp
+  updatedAt timestamp [default: `now()`]
+}
+
+Ref  : Users.id < Posts.userid
+Ref  : Posts.id < PostMentions.postId 
+Ref  : Users.id < PostMentions.userId
+Ref  : Posts.id < CommentMentions.postId 
+Ref  : Comments.id < CommentMentions.commentId
+Ref  : Users.id < CommentMentions.userId
+Ref  : Tags.id < PostTags.tagId
+Ref  : Posts.id < PostTags.postId
+Ref  : Tags.id < CommentTags.tagId
+Ref  : Comments.id < CommentTags.commentId
+Ref  : Users.id < Friends.follower
+Ref  : Users.id < Friends.followee
+Ref  : Posts.id < Images.postId
+Ref  : Users.id < Notifications.fromUser
+Ref  : Users.id < Notifications.toUser
+Ref  : Users.id - Settings.userId
+Ref  : Users.id < Messages.fromUser
+Ref  : Users.id < Messages.toUser
+Ref  : Users.id < Comments.userId
+Ref  : Posts.id < Comments.postId
