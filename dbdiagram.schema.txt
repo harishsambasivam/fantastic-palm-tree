@@ -25,7 +25,7 @@ Enum LANGUAGE {
 }
 
 table Users {
-  id int [pk]
+  id serial [pk]
   firstName varchar [not null]
   lastName varchar 
   userName varchar [not null, unique]
@@ -47,7 +47,7 @@ table Users {
 }
 
 table Friends {
-  id int 
+  id serial 
   follower int [not null]
   followee int [not null]
    createdAt timestamp
@@ -55,7 +55,7 @@ table Friends {
 }
 
 table Posts {
-  id int [pk]
+  id serial [pk]
   userid int [not null] 
   images int 
   likesCount int [not null, default: 0]
@@ -68,7 +68,7 @@ table Posts {
 }
 
 table Comments {
-  id int [pk]
+  id serial [pk]
   userId int [not null] 
   postId int [not null]
   likesCount int [not null]
@@ -78,7 +78,7 @@ table Comments {
 }
 
 table Images {
-  id int [pk]
+  id serial [pk]
   postId int [not null]
   url varchar [not null, unique ]
   createdAt timestamp
@@ -86,7 +86,7 @@ table Images {
 }
 
 table PostMentions {
-  id int [pk]
+  id serial [pk]
   postId int [not null]
   userId int [not null]
   createdAt timestamp
@@ -94,7 +94,7 @@ table PostMentions {
 }
 
 table CommentMentions {
-  id int [pk]
+  id serial [pk]
   commentId int [not null]
   postId int [not null]
   userId int [not null]
@@ -103,14 +103,14 @@ table CommentMentions {
 }
 
 table Tags{
-  id int [pk]
+  id serial [pk]
   tagName varchar [not null, unique]
   createdAt timestamp
   updatedAt timestamp [default: `now()`]
 }
 
 table PostTags {
-  id int [pk]
+  id serial [pk]
   tagId int 
   postId int
    createdAt timestamp
@@ -127,7 +127,7 @@ table CommentTags {
 
 
 table Notifications {
-  id int [pk]
+  id serial [pk]
   fromUser int [not null]
   toUser int [not null]
   message varchar [not null]
@@ -136,7 +136,7 @@ table Notifications {
 }
 
 table Settings {
-  id int 
+  id serial 
   userId int [not null, unique]
   language "LANGUAGE" [not null]
   pushNorifications boolean
@@ -147,7 +147,7 @@ table Settings {
 }
 
 table Messages {
-  id int [pk]
+  id serial [pk]
   fromUser int [not null]
   toUser int [not null]
   text varchar 
